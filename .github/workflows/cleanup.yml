@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,4 +26,8 @@ jobs:
         run: pip install -e .
 
       - name: Run cleanup (7-day retention)
+        env:
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_PUBLISHED_BRANCH: published
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python -m src.utils.cleanup --retention-days 7
