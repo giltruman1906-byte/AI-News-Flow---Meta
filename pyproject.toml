@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "suki-ai-news"
+version = "0.1.0"
+description = "AI news pipeline for Suki Systems — discovers, scores, and publishes high-signal AI news as branded IG/FB carousels."
+requires-python = ">=3.11"
+dependencies = [
+    "feedparser>=6.0.11",
+    "httpx>=0.27",
+    "praw>=7.7",
+    "gspread>=6.0",
+    "google-auth>=2.29",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+    "Pillow>=10.3",
+    "tenacity>=8.3",
+    "anthropic>=0.40",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "ruff>=0.5",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

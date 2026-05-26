@@ -1,0 +1,48 @@
+# Scoring thresholds, voice constants, fixed CTA copy.
+
+scoring:
+  min_auto_post: 8        # >= this → publish next cycle
+  min_floor_post: 6       # 6 .. 7.99 → eligible only for the 2/day floor
+  discard_below: 6        # < this → discard
+
+  # Source-credibility bonus added to the LLM score (clamped to 10).
+  source_tier_bonus:
+    vendor_blog: 1.5
+    tech_press: 0.5
+    hn: 0.0
+    reddit: -0.5
+
+posting:
+  min_posts_per_day: 2
+  timezone: America/New_York
+  # Before this hour ET: auto-post-only (score >= 8).
+  auto_post_cutoff_hour: 18
+  # After this hour ET: stop publishing until next NY day.
+  stop_hour: 22
+
+voice:
+  # Resolves the §4.3 contradiction in the spec.
+  emoji_policy: "max 1 emoji in slide 1 hook; zero elsewhere; zero in fb_caption"
+  forbidden_words:
+    - revolutionary
+    - game-changing
+    - game changer
+    - groundbreaking
+    - paradigm shift
+
+hashtags:
+  # Hybrid strategy: 3 fixed + up to 5 LLM-generated.
+  fixed:
+    - "#AI"
+    - "#SMB"
+    - "#Automation"
+  llm_max: 5
+
+cta:
+  keyword: "STACK"
+  offer_body: "and we'll send you our model-selection matrix — which model for which task, with cost breakdowns."
+  fb_signoff_url: "https://cal.com/yali-reichental-cki87o/30min"
+
+carousel:
+  size: [1080, 1350]
+  num_slides: 7

@@ -1,0 +1,50 @@
+name: AI news pipeline
+
+on:
+  schedule:
+    - cron: "*/20 * * * *"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: publish-pipeline
+      cancel-in-progress: false
+
+    permissions:
+      contents: write    # needed to push generated images to the `published` branch
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -e .
+
+      - name: Run pipeline
+        env:
+          META_APP_ID: ${{ secrets.META_APP_ID }}
+          META_APP_SECRET: ${{ secrets.META_APP_SECRET }}
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          META_PAGE_ACCESS_TOKEN: ${{ secrets.META_PAGE_ACCESS_TOKEN }}
+          META_IG_BUSINESS_ID: ${{ secrets.META_IG_BUSINESS_ID }}
+          LLM_PROVIDER: higgsfield
+          HIGGSFIELD_API_KEY: ${{ secrets.HIGGSFIELD_API_KEY }}
+          HIGGSFIELD_BASE_URL: ${{ secrets.HIGGSFIELD_BASE_URL }}
+          HIGGSFIELD_MODEL: ${{ secrets.HIGGSFIELD_MODEL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_PUBLISHED_BRANCH: published
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+        run: python -m src.main

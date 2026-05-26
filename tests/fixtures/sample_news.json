@@ -1,0 +1,18 @@
+[
+  {
+    "url": "https://www.anthropic.com/news/example-launch",
+    "title": "Anthropic launches example capability",
+    "source": "anthropic.com",
+    "source_tier": "vendor_blog",
+    "published_at": "2026-05-17T12:00:00Z",
+    "summary": "Example summary used for scorer/rewriter unit tests."
+  },
+  {
+    "url": "https://news.ycombinator.com/item?id=12345",
+    "title": "Random AI listicle: 10 tools every founder needs",
+    "source": "Hacker News",
+    "source_tier": "hn",
+    "published_at": "2026-05-17T10:00:00Z",
+    "summary": "Listicle — should be rejected by the scorer."
+  }
+]

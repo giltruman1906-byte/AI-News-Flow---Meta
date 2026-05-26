@@ -1,0 +1,26 @@
+name: Cleanup old published slides
+
+on:
+  schedule:
+    - cron: "0 6 * * 6,0"   # Every Saturday and Sunday at 6:00 AM UTC
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -e .
+
+      - name: Run cleanup (7-day retention)
+        run: python -m src.utils.cleanup --retention-days 7
