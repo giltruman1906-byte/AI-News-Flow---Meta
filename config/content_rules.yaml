@@ -39,8 +39,8 @@ hashtags:
   llm_max: 5
 
 cta:
-  keyword: "STACK"
-  offer_body: "and we'll send you our model-selection matrix — which model for which task, with cost breakdowns."
+  keyword: "ARTICLE"
+  offer_body: "and we'll DM you the full article — sources, details, everything."
   fb_signoff_url: "https://cal.com/yali-reichental-cki87o/30min"
 
 carousel:
