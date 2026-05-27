@@ -4,14 +4,12 @@
 
 rss:
   vendor_blog:
-    - https://www.anthropic.com/news/rss.xml
     - https://openai.com/blog/rss.xml
     - https://deepmind.google/blog/rss.xml
     - https://blog.google/technology/ai/rss/
     - https://huggingface.co/blog/feed.xml
-    - https://mistral.ai/news/feed.xml
-    - https://ai.meta.com/blog/rss/
     - https://www.microsoft.com/en-us/research/feed/
+    - https://raw.githubusercontent.com/taobojlen/anthropic-rss-feed/main/anthropic_news_rss.xml
   tech_press:
     - https://techcrunch.com/category/artificial-intelligence/feed/
     - https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
@@ -19,7 +17,6 @@ rss:
     - https://www.technologyreview.com/feed/
     - https://arstechnica.com/ai/feed/
     - https://www.wired.com/feed/tag/ai/latest/rss
-    - https://www.reuters.com/technology/rss
 
 hackernews:
   query: "AI OR LLM OR Claude OR GPT OR Anthropic OR OpenAI"

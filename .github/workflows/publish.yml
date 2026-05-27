@@ -2,7 +2,8 @@ name: AI news pipeline
 
 on:
   schedule:
-    - cron: "*/20 * * * *"
+    - cron: "0 7 * * *"   # morning post — 7:00 UTC
+    - cron: "0 18 * * *"  # evening post — 18:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -35,7 +36,7 @@ jobs:
           META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
           META_PAGE_ACCESS_TOKEN: ${{ secrets.META_PAGE_ACCESS_TOKEN }}
           META_IG_BUSINESS_ID: ${{ secrets.META_IG_BUSINESS_ID }}
-          LLM_PROVIDER: higgsfield
+          LLM_PROVIDER: anthropic
           HIGGSFIELD_API_KEY: ${{ secrets.HIGGSFIELD_API_KEY }}
           HIGGSFIELD_BASE_URL: ${{ secrets.HIGGSFIELD_BASE_URL }}
           HIGGSFIELD_MODEL: ${{ secrets.HIGGSFIELD_MODEL }}
@@ -48,4 +49,4 @@ jobs:
           REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           MANYCHAT_API_KEY: ${{ secrets.MANYCHAT_API_KEY }}
-        run: python -m src.main
+        run: python -m src.main --limit 100
