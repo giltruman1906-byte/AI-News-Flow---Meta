@@ -33,7 +33,7 @@ from .ai.llm_client import StubClient, build_client
 from .carousel import builder as carousel_builder
 from .config import load_prompt, load_settings, parse_service_account
 from .posting.scheduler import Candidate, decide
-from .posting.manychat import update_article_url
+from .posting.manychat import update_article_url, update_redirect_page
 from .publishers import facebook, instagram
 from .sources import NewsItem, hackernews, reddit, rss
 from .storage.sheets import DedupRow, InMemoryStore, PostRow, build_store, utcnow
@@ -81,6 +81,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Score+render, skip publishing")
     parser.add_argument("--smoke", action="store_true", help="Stub sources/LLM/storage; no network")
+    parser.add_argument("--limit", type=int, default=0, help="Max fresh items to score (0=unlimited)")
     args = parser.parse_args(argv)
 
     logging.basicConfig(
@@ -127,6 +128,8 @@ def main(argv: list[str] | None = None) -> int:
 
     new_dedup_rows: list[DedupRow] = []
     candidates: list[tuple[NewsItem, float]] = []
+    if args.limit:
+        fresh = fresh[:args.limit]
     for item in fresh:
         try:
             result = scorer.score(item, llm, scorer_prompt, tier_bonus)
@@ -253,6 +256,8 @@ def _publish_one(item: NewsItem, score: float, settings, rules, llm, rewriter_pr
                 ig_image_urls, ig_caption,
             )
             update_article_url(settings.manychat_api_key, item.url)
+            update_redirect_page(settings.github_repo, settings.github_published_branch,
+                                 settings.github_token, item.url)
 
     now_utc = datetime.now(tz=timezone.utc)
     store.append_post(PostRow(
