@@ -33,6 +33,7 @@ from .ai.llm_client import StubClient, build_client
 from .carousel import builder as carousel_builder
 from .config import load_prompt, load_settings, parse_service_account
 from .posting.scheduler import Candidate, decide
+from .posting.manychat import update_article_url
 from .publishers import facebook, instagram
 from .sources import NewsItem, hackernews, reddit, rss
 from .storage.sheets import DedupRow, InMemoryStore, PostRow, build_store, utcnow
@@ -204,42 +205,54 @@ def _publish_one(item: NewsItem, score: float, settings, rules, llm, rewriter_pr
     local_dir.mkdir(parents=True, exist_ok=True)
 
     with tempfile.TemporaryDirectory() as td:
-        out_dir = Path(td)
-        paths = carousel_builder.build(content, cta, out_dir)
-        log.info("rendered %d slides for %s", len(paths), item.url)
+        ig_dir = Path(td) / "ig"
+        fb_dir = Path(td) / "fb"
+        ig_paths = carousel_builder.build(content, cta, ig_dir, platform="ig")
+        fb_paths = carousel_builder.build(content, cta, fb_dir, platform="fb")
+        log.info("rendered %d IG + %d FB slides for %s", len(ig_paths), len(fb_paths), item.url)
 
-        # Save a local copy to published/
+        # Save IG slides locally to published/
         saved_paths = []
-        for p in paths:
+        for p in ig_paths:
             dest = local_dir / p.name
             shutil.copy2(p, dest)
             saved_paths.append(dest)
         log.info("saved slides to %s", local_dir)
 
         if dry_run:
-            image_urls = [p.resolve().as_uri() for p in saved_paths]
+            ig_image_urls = [p.resolve().as_uri() for p in saved_paths]
+            fb_image_urls = [p.resolve().as_uri() for p in fb_paths]
         else:
-            image_urls = upload_images(
-                paths,
+            ig_image_urls = upload_images(
+                ig_paths,
                 repo=settings.github_repo,
                 branch=settings.github_published_branch,
                 token=settings.github_token,
-                key_prefix=key_prefix,
+                key_prefix=f"{key_prefix}/ig",
             )
-        log.info("image urls: %s", image_urls)
+            fb_image_urls = upload_images(
+                fb_paths,
+                repo=settings.github_repo,
+                branch=settings.github_published_branch,
+                token=settings.github_token,
+                key_prefix=f"{key_prefix}/fb",
+            )
+        log.info("ig image urls: %s", ig_image_urls)
+        log.info("fb image urls: %s", fb_image_urls)
 
-        # Publish — dry-run skips Meta calls (publishers also dry-run themselves on missing tokens)
+        # Publish — dry-run skips Meta calls
         if dry_run:
             log.info("DRY RUN — skipping FB+IG publish for %s", item.url)
             fb_id = f"fb_dryrun_{url_hash(item.url)}"
             ig_id, carousel_id = f"ig_dryrun_{url_hash(item.url)}", f"ig_container_dryrun_{url_hash(item.url)}"
         else:
             fb_id = facebook.publish(settings.meta_page_id, settings.meta_page_access_token,
-                                      image_urls, fb_caption)
+                                      fb_image_urls, fb_caption)
             ig_id, carousel_id = instagram.publish(
                 settings.meta_ig_business_id, settings.meta_page_access_token,
-                image_urls, ig_caption,
+                ig_image_urls, ig_caption,
             )
+            update_article_url(settings.manychat_api_key, item.url)
 
     now_utc = datetime.now(tz=timezone.utc)
     store.append_post(PostRow(

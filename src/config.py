@@ -46,6 +46,9 @@ class Settings:
     reddit_client_secret: str
     reddit_user_agent: str
 
+    # ManyChat
+    manychat_api_key: str
+
     # Behavior
     min_score_auto_post: float
     min_score_floor_post: float
@@ -81,6 +84,7 @@ def load_settings() -> Settings:
         reddit_client_id=os.getenv("REDDIT_CLIENT_ID", ""),
         reddit_client_secret=os.getenv("REDDIT_CLIENT_SECRET", ""),
         reddit_user_agent=os.getenv("REDDIT_USER_AGENT", "suki-ai-news/0.1"),
+        manychat_api_key=os.getenv("MANYCHAT_API_KEY", ""),
         min_score_auto_post=float(os.getenv("MIN_SCORE_AUTO_POST", "8")),
         min_score_floor_post=float(os.getenv("MIN_SCORE_FLOOR_POST", "6")),
         min_posts_per_day=int(os.getenv("MIN_POSTS_PER_DAY", "2")),

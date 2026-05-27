@@ -8,15 +8,28 @@ from .slides import (
     CTASlide,
     ContentSlide,
     CoverSlide,
+    FBCTASlide,
     LeverageSlide,
     PlaySlide,
     save,
 )
 
 
-def build(content: CarouselContent, cta: dict, out_dir: Path) -> list[Path]:
-    """Render 7 PNGs to out_dir, return their paths in order."""
+def build(content: CarouselContent, cta: dict, out_dir: Path, platform: str = "ig") -> list[Path]:
+    """Render 7 PNGs to out_dir, return their paths in order.
+
+    platform: "ig" for Instagram (Comment CTA), "fb" for Facebook (Read article CTA).
+    """
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    if platform == "fb":
+        cta_slide = FBCTASlide(offer_body=cta.get("offer_body", ""))
+    else:
+        cta_slide = CTASlide(
+            keyword=cta.get("keyword", "STACK"),
+            offer_body=cta.get("offer_body", ""),
+        )
+
     slides = [
         CoverSlide(
             hook=content.slide_1_hook,
@@ -35,10 +48,7 @@ def build(content: CarouselContent, cta: dict, out_dir: Path) -> list[Path]:
             stat_bottom=content.slide_6_stat_bottom,
             body=content.slide_6_body,
         ),
-        CTASlide(
-            keyword=cta.get("keyword", "STACK"),
-            offer_body=cta.get("offer_body", ""),
-        ),
+        cta_slide,
     ]
     paths: list[Path] = []
     for i, s in enumerate(slides, start=1):

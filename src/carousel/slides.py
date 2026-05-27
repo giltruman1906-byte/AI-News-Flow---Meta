@@ -234,7 +234,7 @@ class LeverageSlide:
 
 
 class CTASlide:
-    """Slide 7: dark bg, keyword CTA."""
+    """Slide 7: dark bg, keyword CTA (Instagram version)."""
 
     def __init__(self, keyword: str, offer_body: str):
         self.keyword = keyword
@@ -261,6 +261,49 @@ class CTASlide:
             draw.text((SPACING.slide_w // 2 - draw.textbbox((0, 0), ln, font=body_font)[2] // 2, y),
                       ln, fill=COLORS.text_muted_light, font=body_font)
             y += 46
+
+        logo_y = SPACING.slide_h - pad - 60
+        _draw_suki_logo(draw, SPACING.slide_w // 2 - 80, logo_y)
+        brand_font = _font(FONTS.display, 24)
+        draw.text((SPACING.slide_w // 2 - 80 + 50, logo_y + 6), "SUKI SYSTEMS",
+                  fill=COLORS.text_light, font=brand_font)
+
+        _footer(draw, 7, dark_bg=True)
+        return img
+
+
+class FBCTASlide:
+    """Slide 7: dark bg, 'Read full article' CTA (Facebook version)."""
+
+    def __init__(self, offer_body: str = ""):
+        self.offer_body = offer_body
+
+    def render(self) -> Image.Image:
+        img, draw = _canvas(COLORS.bg_dark)
+        pad = SPACING.padding
+
+        label_font = _font(FONTS.mono, 20)
+        draw.text((pad, pad + 4), "YOUR MOVE", fill=COLORS.text_muted_light, font=label_font)
+
+        head_font = _font(FONTS.display_heavy, 100)
+        arrow_font = _font(FONTS.display, 120)
+        y = SPACING.slide_h // 2 - 200
+        for ln in _wrap(draw, "Read the full article", head_font, SPACING.slide_w - 2 * pad):
+            draw.text((pad, y), ln, fill=COLORS.text_light, font=head_font)
+            y += 120
+        y += 20
+        draw.text((pad, y), "↓", fill=COLORS.accent, font=arrow_font)
+        link_font = _font(FONTS.body, 40)
+        draw.text((pad + 100, y + 30), "Link below", fill=COLORS.accent, font=link_font)
+        y += 160
+
+        if self.offer_body:
+            body_font = _font(FONTS.body, 34)
+            max_w = SPACING.slide_w - 2 * pad
+            for ln in _wrap(draw, self.offer_body, body_font, max_w):
+                draw.text((SPACING.slide_w // 2 - draw.textbbox((0, 0), ln, font=body_font)[2] // 2, y),
+                          ln, fill=COLORS.text_muted_light, font=body_font)
+                y += 46
 
         logo_y = SPACING.slide_h - pad - 60
         _draw_suki_logo(draw, SPACING.slide_w // 2 - 80, logo_y)
