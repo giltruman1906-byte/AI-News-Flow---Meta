@@ -197,7 +197,7 @@ def _publish_one(item: NewsItem, score: float, settings, rules, llm, rewriter_pr
     extra = [t for t in content.hashtags if t not in fixed][:llm_max]
     hashtags = fixed + extra
     fb_signoff = cta.get("fb_signoff_url", "")
-    fb_caption = f"{content.fb_caption}\n\n→ Book a free audit: {fb_signoff}\n\n{' '.join(hashtags)}"
+    fb_caption = f"{content.fb_caption}\n\n→ Read the full article: {item.url}\n\n→ Book a free audit: {fb_signoff}\n\n{' '.join(hashtags)}"
     keyword = cta.get("keyword", "ARTICLE")
     ig_caption = f"{content.slide_1_hook}\n\n{content.slide_3_body}\n\n{content.slide_4_body}\n\n{content.slide_5_body}\n\nComment \"{keyword}\" and we'll DM you the full article.\n\n{' '.join(hashtags)}"
 

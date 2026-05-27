@@ -18,7 +18,7 @@ Slides:
 6. **Leverage** — A stat comparison showing cost/speed/scale advantage. Two short stat strings (e.g. "$4K", "$300") + 2-sentence explanation.
 7. CTA — fixed copy, do not generate (template-filled).
 
-Facebook caption: 2-3 paragraphs combining slides 3-5, signed off with a cal.com link (template-appended).
+Facebook caption: 2-3 paragraphs combining slides 3-5. Do NOT include any links — they are appended by the pipeline.
 
 Return JSON only:
 {
