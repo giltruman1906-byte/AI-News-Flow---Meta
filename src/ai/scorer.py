@@ -22,7 +22,7 @@ def score(item: NewsItem, client: LLMClient, prompt_template: str, tier_bonus: d
         .replace("{source}", item.source)
         .replace("{source_tier}", item.source_tier)
         .replace("{published_at}", item.published_at.isoformat())
-        .replace("{summary}", item.summary[:4000])
+        .replace("{summary}", item.summary[:500])
     )
     data = client.complete_json(prompt)
     raw = float(data.get("score", 0))
