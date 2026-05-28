@@ -2,8 +2,7 @@ name: AI news pipeline
 
 on:
   schedule:
-    - cron: "0 7 * * *"   # morning post — 7:00 UTC
-    - cron: "0 18 * * *"  # evening post — 18:00 UTC
+    - cron: "0 4 * * *"   # daily post — 04:00 UTC (07:00 Israel IDT)
   workflow_dispatch:
 
 jobs:
