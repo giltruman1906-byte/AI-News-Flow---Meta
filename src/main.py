@@ -68,7 +68,8 @@ def fetch_all(settings, smoke: bool) -> list[NewsItem]:
 
     items: list[NewsItem] = []
     rss_cfg = settings.sources["rss"]
-    items.extend(rss.fetch(rss_cfg, lookback_hours=rss_cfg.get("lookback_hours", 48)))
+    rss_urls = {k: v for k, v in rss_cfg.items() if isinstance(v, list)}
+    items.extend(rss.fetch(rss_urls, lookback_hours=rss_cfg.get("lookback_hours", 48)))
     hn = settings.sources["hackernews"]
     items.extend(hackernews.fetch(hn["query"], hn["min_points"], hn["lookback_hours"]))
     rd = settings.sources.get("reddit")
