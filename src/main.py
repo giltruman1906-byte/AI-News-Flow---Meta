@@ -24,7 +24,7 @@ import json
 import logging
 import shutil
 import tempfile
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -109,10 +109,16 @@ def main(argv: list[str] | None = None) -> int:
         sa = parse_service_account(settings.google_service_account_json) if settings.google_service_account_json else None
         store = build_store(settings.google_sheets_id, sa)
 
-    # 1. Load dedup
+    # 1. Load dedup — only block articles seen in the last 30 days.
+    # Without this window the cache grows unboundedly and eventually covers the
+    # entire RSS corpus, producing 0 fresh items on every run.
     dedup_rows = store.load_dedup()
-    seen_hashes = {r.url_hash for r in dedup_rows}
-    log.info("dedup cache: %d entries", len(seen_hashes))
+    dedup_cutoff = datetime.now(tz=timezone.utc) - timedelta(days=30)
+    seen_hashes = {
+        r.url_hash for r in dedup_rows
+        if r.seen_at.replace(tzinfo=timezone.utc) >= dedup_cutoff
+    }
+    log.info("dedup cache: %d entries (%d total rows, 30-day window)", len(seen_hashes), len(dedup_rows))
 
     # 2-3. Fetch + filter
     items = fetch_all(settings, smoke)
