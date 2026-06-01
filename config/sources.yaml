@@ -3,6 +3,7 @@
 # The scorer uses this tier as a bias signal.
 
 rss:
+  lookback_hours: 48   # only include articles published within this window
   vendor_blog:
     - https://openai.com/blog/rss.xml
     - https://deepmind.google/blog/rss.xml
@@ -10,6 +11,8 @@ rss:
     - https://huggingface.co/blog/feed.xml
     - https://www.microsoft.com/en-us/research/feed/
     - https://raw.githubusercontent.com/taobojlen/anthropic-rss-feed/main/anthropic_news_rss.xml
+    - https://stability.ai/news/rss.xml
+    - https://mistral.ai/news/rss
   tech_press:
     - https://techcrunch.com/category/artificial-intelligence/feed/
     - https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
@@ -17,8 +20,11 @@ rss:
     - https://www.technologyreview.com/feed/
     - https://arstechnica.com/ai/feed/
     - https://www.wired.com/feed/tag/ai/latest/rss
+    - https://www.zdnet.com/topic/artificial-intelligence/rss.xml
+    - https://www.businessinsider.com/tech/rss
+    - https://www.reuters.com/technology/artificial-intelligence/rss/
 
 hackernews:
-  query: "AI OR LLM OR Claude OR GPT OR Anthropic OR OpenAI"
-  min_points: 50
-  lookback_hours: 24
+  query: "AI OR LLM OR Claude OR GPT OR Anthropic OR OpenAI OR machine learning OR neural"
+  min_points: 25
+  lookback_hours: 48

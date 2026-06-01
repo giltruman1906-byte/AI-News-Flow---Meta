@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 
 import feedparser
@@ -34,7 +34,8 @@ def _source_name(feed_url: str, feed) -> str:
     return urlparse(feed_url).netloc.removeprefix("www.")
 
 
-def fetch(urls_by_tier: dict[str, list[str]]) -> list[NewsItem]:
+def fetch(urls_by_tier: dict[str, list[str]], lookback_hours: int = 48) -> list[NewsItem]:
+    since = datetime.now(tz=timezone.utc) - timedelta(hours=lookback_hours)
     items: list[NewsItem] = []
     for tier, urls in urls_by_tier.items():
         for url in urls:
@@ -54,6 +55,10 @@ def fetch(urls_by_tier: dict[str, list[str]]) -> list[NewsItem]:
                 title = entry.get("title")
                 if not link or not title:
                     continue
+                published_at = _parse_published(entry)
+                pub_aware = published_at.replace(tzinfo=timezone.utc) if published_at.tzinfo is None else published_at
+                if pub_aware < since:
+                    continue
                 summary = entry.get("summary", "") or entry.get("description", "") or ""
                 items.append(
                     NewsItem(
@@ -61,7 +66,7 @@ def fetch(urls_by_tier: dict[str, list[str]]) -> list[NewsItem]:
                         title=title.strip(),
                         source=src_name,
                         source_tier=tier,
-                        published_at=_parse_published(entry),
+                        published_at=published_at,
                         summary=summary[:2000],
                     )
                 )
