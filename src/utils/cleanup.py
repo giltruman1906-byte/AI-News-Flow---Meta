@@ -62,7 +62,7 @@ def _gh_delete_file(repo: str, branch: str, path: str, sha: str, token: str) -> 
     url = f"https://api.github.com/repos/{repo}/contents/{path}"
     headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
     body = {"message": f"cleanup: remove {path}", "sha": sha, "branch": branch}
-    r = httpx.delete(url, json=body, headers=headers, timeout=30)
+    r = httpx.request("DELETE", url, json=body, headers=headers, timeout=30)
     r.raise_for_status()
 
 
