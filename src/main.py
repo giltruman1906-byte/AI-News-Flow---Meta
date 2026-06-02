@@ -33,7 +33,6 @@ from .ai.llm_client import StubClient, build_client
 from .carousel import builder as carousel_builder
 from .config import load_prompt, load_settings, parse_service_account
 from .posting.scheduler import Candidate, decide
-from .posting.manychat import update_article_url, update_redirect_page
 from .publishers import facebook, instagram
 from .sources import NewsItem, hackernews, reddit, rss
 from .storage.sheets import DedupRow, InMemoryStore, PostRow, build_store, utcnow
@@ -206,8 +205,7 @@ def _publish_one(item: NewsItem, score: float, settings, rules, llm, rewriter_pr
     hashtags = fixed + extra
     fb_signoff = cta.get("fb_signoff_url", "")
     fb_caption = f"{content.fb_caption}\n\n→ Read the full article: {item.url}\n\n→ Book a free audit: {fb_signoff}\n\n{' '.join(hashtags)}"
-    keyword = cta.get("keyword", "ARTICLE")
-    ig_caption = f"{content.slide_1_hook}\n\n{content.slide_3_body}\n\n{content.slide_4_body}\n\n{content.slide_5_body}\n\nComment \"{keyword}\" and we'll DM you the full article.\n\n{' '.join(hashtags)}"
+    ig_caption = f"{content.slide_1_hook}\n\n{content.slide_3_body}\n\n{content.slide_4_body}\n\n{content.slide_5_body}\n\nWant to implement AI like this in your business? Book a free 30-min strategy call — link in bio 👇\n\n{' '.join(hashtags)}"
 
     published_root = Path(__file__).resolve().parent.parent / "published"
     key_prefix_date = item.published_at.strftime("%Y/%m/%d")
@@ -263,9 +261,7 @@ def _publish_one(item: NewsItem, score: float, settings, rules, llm, rewriter_pr
                 settings.meta_ig_business_id, settings.meta_page_access_token,
                 ig_image_urls, ig_caption,
             )
-            update_article_url(settings.manychat_api_key, item.url)
-            update_redirect_page(settings.github_repo, settings.github_published_branch,
-                                 settings.github_token, item.url)
+            pass  # ManyChat removed
 
     now_utc = datetime.now(tz=timezone.utc)
     store.append_post(PostRow(

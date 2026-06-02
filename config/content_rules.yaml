@@ -13,7 +13,7 @@ scoring:
     reddit: -0.5
 
 posting:
-  min_posts_per_day: 2
+  min_posts_per_day: 1
   timezone: America/New_York
   # Before this hour ET: auto-post-only (score >= 8).
   auto_post_cutoff_hour: 18
@@ -39,9 +39,9 @@ hashtags:
   llm_max: 5
 
 cta:
-  keyword: "ARTICLE"
-  offer_body: "and we'll DM you the full article — sources, details, everything."
+  offer_body: ""
   fb_signoff_url: "https://cal.com/suki-systems/30min"
+  booking_url: "cal.com/suki-systems/30min"
 
 carousel:
   size: [1080, 1350]

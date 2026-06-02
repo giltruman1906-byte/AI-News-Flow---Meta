@@ -5,10 +5,10 @@ from pathlib import Path
 
 from ..ai.rewriter import CarouselContent
 from .slides import (
-    CTASlide,
     ContentSlide,
     CoverSlide,
     FBCTASlide,
+    IGBookingCTASlide,
     LeverageSlide,
     PlaySlide,
     save,
@@ -25,10 +25,7 @@ def build(content: CarouselContent, cta: dict, out_dir: Path, platform: str = "i
     if platform == "fb":
         cta_slide = FBCTASlide(offer_body=cta.get("offer_body", ""))
     else:
-        cta_slide = CTASlide(
-            keyword=cta.get("keyword", "STACK"),
-            offer_body=cta.get("offer_body", ""),
-        )
+        cta_slide = IGBookingCTASlide(booking_url=cta.get("booking_url", "cal.com/suki-systems/30min"))
 
     slides = [
         CoverSlide(

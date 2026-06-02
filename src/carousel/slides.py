@@ -233,34 +233,35 @@ class LeverageSlide:
         return img
 
 
-class CTASlide:
-    """Slide 7: dark bg, keyword CTA (Instagram version)."""
+class IGBookingCTASlide:
+    """Slide 7 (Instagram): dark bg, book-a-call CTA with cal.com URL."""
 
-    def __init__(self, keyword: str, offer_body: str):
-        self.keyword = keyword
-        self.offer_body = offer_body
+    def __init__(self, booking_url: str = "cal.com/suki-systems/30min"):
+        self.booking_url = booking_url
 
     def render(self) -> Image.Image:
         img, draw = _canvas(COLORS.bg_dark)
         pad = SPACING.padding
+        max_w = SPACING.slide_w - 2 * pad
 
         label_font = _font(FONTS.mono, 20)
         draw.text((pad, pad + 4), "YOUR MOVE", fill=COLORS.text_muted_light, font=label_font)
 
-        comment_font = _font(FONTS.display_heavy, 100)
-        keyword_font = _font(FONTS.display, 140)
-        y = SPACING.slide_h // 2 - 200
-        draw.text((pad, y), "Comment", fill=COLORS.text_light, font=comment_font)
-        y += 130
-        draw.text((pad, y), self.keyword.upper(), fill=COLORS.accent, font=keyword_font)
-        y += 140
+        head_font = _font(FONTS.display_heavy, 90)
+        y = SPACING.slide_h // 2 - 260
+        for ln in _wrap(draw, "Want AI working in your business?", head_font, max_w):
+            draw.text((pad, y), ln, fill=COLORS.text_light, font=head_font)
+            y += 108
 
-        body_font = _font(FONTS.body, 34)
-        max_w = SPACING.slide_w - 2 * pad
-        for ln in _wrap(draw, self.offer_body, body_font, max_w):
-            draw.text((SPACING.slide_w // 2 - draw.textbbox((0, 0), ln, font=body_font)[2] // 2, y),
-                      ln, fill=COLORS.text_muted_light, font=body_font)
-            y += 46
+        y += 30
+        sub_font = _font(FONTS.body, 42)
+        draw.text((pad, y), "Book a free 30-min strategy call", fill=COLORS.text_muted_light, font=sub_font)
+        y += 70
+        draw.line((pad, y, pad + 60, y), fill=COLORS.accent, width=4)
+        y += 30
+
+        url_font = _font(FONTS.mono, 38)
+        draw.text((pad, y), self.booking_url, fill=COLORS.accent, font=url_font)
 
         logo_y = SPACING.slide_h - pad - 60
         _draw_suki_logo(draw, SPACING.slide_w // 2 - 80, logo_y)
