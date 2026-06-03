@@ -205,7 +205,8 @@ def _publish_one(item: NewsItem, score: float, settings, rules, llm, rewriter_pr
     hashtags = fixed + extra
     fb_signoff = cta.get("fb_signoff_url", "")
     fb_caption = f"{content.fb_caption}\n\n→ Read the full article: {item.url}\n\n→ Book a free audit: {fb_signoff}\n\n{' '.join(hashtags)}"
-    ig_caption = f"{content.slide_1_hook}\n\n{content.slide_3_body}\n\n{content.slide_4_body}\n\n{content.slide_5_body}\n\nWant to implement AI like this in your business? Book a free 30-min strategy call — link in bio 👇\n\n{' '.join(hashtags)}"
+    booking_url = cta.get("fb_signoff_url", "https://cal.com/suki-systems/30min")
+    ig_caption = f"{content.slide_1_hook}\n\n{content.slide_3_body}\n\n{content.slide_4_body}\n\n{content.slide_5_body}\n\nWant to implement AI like this in your business? Book a free 30-min call with us 👇\n{booking_url}\n\n{' '.join(hashtags)}"
 
     published_root = Path(__file__).resolve().parent.parent / "published"
     key_prefix_date = item.published_at.strftime("%Y/%m/%d")

@@ -234,7 +234,7 @@ class LeverageSlide:
 
 
 class IGBookingCTASlide:
-    """Slide 7 (Instagram): dark bg, book-a-call CTA with cal.com URL."""
+    """Slide 7 (Instagram): dark bg, book-a-call CTA. URL lives in the caption."""
 
     def __init__(self, booking_url: str = "cal.com/suki-systems/30min"):
         self.booking_url = booking_url
@@ -255,13 +255,13 @@ class IGBookingCTASlide:
 
         y += 30
         sub_font = _font(FONTS.body, 42)
-        draw.text((pad, y), "Book a free 30-min strategy call", fill=COLORS.text_muted_light, font=sub_font)
+        draw.text((pad, y), "Book a free 30-min call with us", fill=COLORS.text_muted_light, font=sub_font)
         y += 70
         draw.line((pad, y, pad + 60, y), fill=COLORS.accent, width=4)
         y += 30
 
-        url_font = _font(FONTS.mono, 38)
-        draw.text((pad, y), self.booking_url, fill=COLORS.accent, font=url_font)
+        arrow_font = _font(FONTS.display, 100)
+        draw.text((pad, y), "↓", fill=COLORS.accent, font=arrow_font)
 
         logo_y = SPACING.slide_h - pad - 60
         _draw_suki_logo(draw, SPACING.slide_w // 2 - 80, logo_y)
