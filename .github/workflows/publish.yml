@@ -2,7 +2,7 @@ name: AI news pipeline
 
 on:
   schedule:
-    - cron: "0 4 */2 * *"  # every 2 days — 04:00 UTC (07:00 Israel IDT)
+    - cron: "0 14 */2 * *"  # every 2 days — 14:00 UTC (10:00 AM EDT / 17:00 IDT)
   workflow_dispatch:
 
 jobs:

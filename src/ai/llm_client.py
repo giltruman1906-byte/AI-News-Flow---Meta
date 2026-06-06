@@ -96,10 +96,19 @@ class StubClient:
                 "category": "model",
             }
         return {
-            "slide_1_hook": "AI just shipped something real.",
-            "slide_2_what": "A major lab released a new capability today. It's available now in their API.",
-            "slide_3_why": "SMBs gain a concrete new building block. Faster automation, lower cost.",
-            "slide_4_take": "The bar moved — again. Move with it or get out-shipped.",
+            "slide_1_hook": "AI JUST SHIPPED",
+            "slide_1_subtitle": "A major lab released a new capability today. Available in their API now.",
+            "slide_2_play": "SMBs gain a concrete new building block — faster automation, lower cost.",
+            "slide_2_accent": "new building block",
+            "slide_3_headline": "What shipped",
+            "slide_3_body": "A major lab released a new capability. It is available in their API today.",
+            "slide_4_headline": "Why it matters",
+            "slide_4_body": "SMBs can now automate tasks that previously required human oversight. Cost drops.",
+            "slide_5_headline": "Your move",
+            "slide_5_body": "The bar moved again. Operators who integrate this first gain a durable edge.",
+            "slide_6_stat_top": "$4K",
+            "slide_6_stat_bottom": "$300",
+            "slide_6_body": "Legacy workflow cost vs. AI-assisted equivalent. Same output, a tenth of the budget.",
             "fb_caption": "A major lab released a new capability today. SMBs gain a concrete new building block — faster automation, lower cost.\n\nThe bar moved again. Move with it or get out-shipped.",
             "hashtags": ["#AI", "#SMB", "#Automation", "#LLM", "#Shipping"],
         }
