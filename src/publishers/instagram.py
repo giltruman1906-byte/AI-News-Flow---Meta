@@ -83,11 +83,20 @@ def publish(ig_business_id: str, token: str, image_urls: list[str], caption: str
     carousel_id = r.json()["id"]
     _wait_finished(carousel_id, token)
 
-    r = httpx.post(
-        f"{GRAPH_BASE}/{ig_business_id}/media_publish",
-        data={"creation_id": carousel_id, "access_token": token},
-        timeout=60,
-    )
-    if r.status_code >= 400:
+    PUBLISH_RETRIES = 5
+    PUBLISH_RETRY_WAIT_S = 8
+    for attempt in range(1, PUBLISH_RETRIES + 1):
+        r = httpx.post(
+            f"{GRAPH_BASE}/{ig_business_id}/media_publish",
+            data={"creation_id": carousel_id, "access_token": token},
+            timeout=60,
+        )
+        if r.status_code < 400:
+            return r.json()["id"], carousel_id
+        err = r.json().get("error", {})
+        # 2207027 = "media not ready" — transient, retry after a short wait
+        if err.get("error_subcode") == 2207027 and attempt < PUBLISH_RETRIES:
+            log.warning("IG media not ready (attempt %d/%d), retrying in %ds…", attempt, PUBLISH_RETRIES, PUBLISH_RETRY_WAIT_S)
+            time.sleep(PUBLISH_RETRY_WAIT_S)
+            continue
         raise MetaError(f"IG publish failed {r.status_code}: {r.text}")
-    return r.json()["id"], carousel_id
